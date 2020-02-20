@@ -48,7 +48,7 @@ public class CustomerServiceApiControllerTest {
 	@Test
 	public void whenFindById_thenReturnCustomer() {
 		// given
-		Customer customer = new Customer(1, 1, "Sathish", "Kumar", null, 28, new Address());
+		Customer customer = new Customer(1L, 1, "Sathish", "Kumar", null, 28, new Address());
 		Optional<Customer> customerOptional = Optional.of(customer);
 
 		doReturn(customerOptional).when(customerRepository).findById(1L);
@@ -109,15 +109,14 @@ public class CustomerServiceApiControllerTest {
 	public void whenUpdateCustomerAddress_thenReturnUpdatedCustomer() {
 		// given
 
-		Customer customer = new Customer(1, 1, "Sathish", "Kumar", null, 28, null);
-		Address address = new Address(1, "No 35", "Second cross", "KA", "231145", "IN", customer);
+		Customer customer = new Customer(0, 1, "Sathish", "Kumar", null, 28, null);
+		Address address = new Address(0, "No 35", "Second cross", "KA", "231145", "IN", customer);
 		customer.setAddress(address);
 		doReturn(customer).when(customerRepository).save(customer);
 
 		// when
-		Customer actualCustomer = businessServiceImpl.updateCustomerAddress(1, address);
+		Customer actualCustomer = businessServiceImpl.updateCustomerAddress(0, address);
 		// then
 		assertThat(actualCustomer.getAddress().getId()).isEqualTo(customer.getAddress().getId());
 	}
-
 }

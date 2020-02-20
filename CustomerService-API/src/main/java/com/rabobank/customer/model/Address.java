@@ -1,5 +1,7 @@
 package com.rabobank.customer.model;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +21,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "T_ADDRESS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Address {
+public class Address implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7345418062479675657L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

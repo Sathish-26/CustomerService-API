@@ -1,5 +1,6 @@
 package com.rabobank.customer.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Calendar;
@@ -28,7 +29,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "T_CUSTOMER")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Customer {
+public class Customer implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2842116160173783996L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
