@@ -110,7 +110,7 @@ public class CustomerServiceApiControllerTest {
 		// given
 
 		Customer customer = new Customer(0, 1, "Sathish", "Kumar", null, 28, null);
-		Address address = new Address(0, "No 35", "Second cross", "KA", "231145", "IN", customer);
+		Address address = new Address(0, "No 35", "Second cross", "KA", "231145", "IN");
 		customer.setAddress(address);
 		doReturn(customer).when(customerRepository).save(customer);
 

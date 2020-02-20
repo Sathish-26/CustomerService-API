@@ -23,9 +23,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.context.jdbc.Sql;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.rabobank.customer.model.CustomerServiceResponse;
 import com.rabobank.customer.model.Address;
 import com.rabobank.customer.model.Customer;
+import com.rabobank.customer.model.CustomerServiceResponse;
 
 @EnableAutoConfiguration
 @SpringBootTest(classes = CustomerServiceApiApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -51,10 +51,7 @@ public class CustomerServiceApiIntegrationTest {
 	@Sql({ "schema.sql", "data.sql" })
 	@Test
 	public void testAllCustomers() {
-		List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
-		acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+
 		CustomerServiceResponse customerServiceResponse = this.restTemplate
 				.getForObject("http://localhost:" + port + "/v1/customers", CustomerServiceResponse.class);
 
@@ -108,8 +105,7 @@ public class CustomerServiceApiIntegrationTest {
 
 	@Test
 	public void testUpdateAddress() {
-		Customer customer = new Customer(0, 7, "Sathish", "Kumar", null, 28, new Address());
-		Address address = new Address(1, "No 35", "Second cross", "KA", "231145", "IN", customer);
+		Address address = new Address(1, "No 35", "Second cross", "KA", "231145", "IN");
 		Customer c = this.restTemplate.patchForObject("http://localhost:" + port + "/v1/customers/1", address,
 				Customer.class);
 		assertEquals("First street", c.getAddress().getAddressLine1());

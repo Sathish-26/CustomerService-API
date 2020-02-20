@@ -4,17 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.Cascade;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -59,11 +54,6 @@ public class Address implements Serializable {
 	@Column(name = "COUNTRY")
 	private String country;
 
-//	@OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "customer_id", nullable = false)
-//	@Cascade(org.hibernate.annotations.CascadeType.ALL)
-//	private Customer customer;
-
 	public long getId() {
 		return id;
 	}
@@ -72,20 +62,11 @@ public class Address implements Serializable {
 		this.id = id;
 	}
 
-//	public Customer getCustomer() {
-//		return customer;
-//	}
-//
-//	public void setCustomer(Customer customer) {
-//		this.customer = customer;
-//	}
-
 	public Address() {
 
 	}
 
-	public Address(long id, String addressLine1, String addressline2, String state, String zipCode, String country,
-			Customer customer) {
+	public Address(long id, String addressLine1, String addressline2, String state, String zipCode, String country) {
 		super();
 		this.id = id;
 		this.addressLine1 = addressLine1;
@@ -93,7 +74,6 @@ public class Address implements Serializable {
 		this.state = state;
 		this.zipCode = zipCode;
 		this.country = country;
-//		this.customer = customer;
 	}
 
 	public String getAddressLine1() {
