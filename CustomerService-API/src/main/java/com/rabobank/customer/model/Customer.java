@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "T_CUSTOMER")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Customer implements Serializable{
+public class Customer implements Serializable {
 
 	/**
 	 * 
@@ -60,7 +60,7 @@ public class Customer implements Serializable{
 	@Transient
 	private Integer age;
 
-	@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.PERSIST)
 	private Address address;
 
 	@Version

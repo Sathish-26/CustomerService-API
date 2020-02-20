@@ -22,6 +22,7 @@ import com.rabobank.customer.exceptions.CustomerServiceApiException;
 import com.rabobank.customer.exceptions.ExceptionConstants;
 import com.rabobank.customer.model.Address;
 import com.rabobank.customer.model.Customer;
+import com.rabobank.customer.model.CustomerServiceResponse;
 import com.rabobank.customer.utils.ValidationUtils;
 
 import io.swagger.annotations.Api;
@@ -59,12 +60,12 @@ public class CustomerServiceApiController {
 		return newCustomerDetails;
 	}
 
-	@ApiOperation(value = "Retrieves list of all available customers", response = Customer.class)
+	@ApiOperation(value = "Retrieves list of all available customers", response = CustomerServiceResponse.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully retrieved the customers list"),
 			@ApiResponse(code = 401, message = "You are not authorized to retrieve all customer"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	@RequestMapping(value = "/customers", method = RequestMethod.GET, produces = "application/json")
-	public List<Customer> retrieveAllCustomers() {
+	public CustomerServiceResponse retrieveAllCustomers() {
 		logger.info("Entered retrieveAllCustomers");
 		List<Customer> customersList = null;
 		try {
@@ -75,15 +76,16 @@ public class CustomerServiceApiController {
 					ExceptionConstants.RETRIEVE_ALL_CUSTOMERS_EXCEPTION_MSG, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("Completed retrieveAllCustomers");
-		return customersList;
+		return new CustomerServiceResponse(customersList);
 	}
 
-	@ApiOperation(value = "Retrieves list of all available customers based on first name or last name", response = Customer.class)
+	@ApiOperation(value = "Retrieves list of all available customers based on first name or last name", response = CustomerServiceResponse.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully retrieved the customers list"),
 			@ApiResponse(code = 401, message = "You are not authorized to retrieve all customer"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	@RequestMapping(value = "/customers/name", method = RequestMethod.GET, produces = "application/json")
-	public List<Customer> retrieveCustomersByName(@RequestParam(value = "firstName", required = true) String firstName,
+	public CustomerServiceResponse retrieveCustomersByName(
+			@RequestParam(value = "firstName", required = true) String firstName,
 			@RequestParam(value = "lastName", required = false) String lastName) {
 		logger.info("Entered retrieveCustomersByName with firstname {} and lastName: {}", firstName, lastName);
 		List<Customer> customersList = null;
@@ -110,7 +112,7 @@ public class CustomerServiceApiController {
 			}
 		}
 		logger.info("Completed retrieveCustomersByName");
-		return customersList;
+		return new CustomerServiceResponse(customersList);
 	}
 
 	@ApiOperation(value = "Retrieves a customer by Id", response = Customer.class)

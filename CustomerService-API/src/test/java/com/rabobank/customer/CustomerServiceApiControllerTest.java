@@ -57,7 +57,7 @@ public class CustomerServiceApiControllerTest {
 		Customer actualCustomer = businessServiceImpl.retrieveCustomerById(1L);
 
 		// then
-		assertThat(actualCustomer.getId()).isEqualTo(customerOptional.get().getId());
+		assertThat(actualCustomer.getFirstName()).isEqualTo(customerOptional.get().getFirstName());
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class CustomerServiceApiControllerTest {
 		Customer actualCustomer = businessServiceImpl.addANewCustomer(customer);
 
 		// then
-		assertThat(actualCustomer.getId()).isEqualTo(1);
+		assertThat(actualCustomer.getFirstName()).isEqualTo("Sathish");
 	}
 
 	@Test
@@ -117,6 +117,6 @@ public class CustomerServiceApiControllerTest {
 		// when
 		Customer actualCustomer = businessServiceImpl.updateCustomerAddress(0, address);
 		// then
-		assertThat(actualCustomer.getAddress().getId()).isEqualTo(customer.getAddress().getId());
+		assertThat(actualCustomer.getAddress().getCountry()).isEqualTo(customer.getAddress().getCountry());
 	}
 }
