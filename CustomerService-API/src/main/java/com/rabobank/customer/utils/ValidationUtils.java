@@ -17,8 +17,8 @@ public class ValidationUtils {
 		String[] maliciousDataSamples = { "select", "insert into ", "update", "delete from", "upsert", "call",
 				"rollback ", "create table", "drop table", "drop view", "alter table", "truncate table", "desc" };
 		List<String> dataSamples = Arrays.asList(maliciousDataSamples);
-		boolean isValidInput = dataSamples.stream().anyMatch(x -> textToValidate.contains(x));
-		if (!isValidInput) {
+		boolean isInValidInput = dataSamples.stream().anyMatch(x -> textToValidate.contains(x));
+		if (isInValidInput) {
 			throw new CustomerServiceApiException("Input Validation failed", "Input contains malicious characters",
 					HttpStatus.BAD_REQUEST);
 		}

@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "T_ADDRESS")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id"/* , scope = Address.class */)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Address implements Serializable {
+public class AddressEntity implements Serializable {
 
 	/**
 	 * 
@@ -62,11 +62,12 @@ public class Address implements Serializable {
 		this.id = id;
 	}
 
-	public Address() {
+	public AddressEntity() {
 
 	}
 
-	public Address(long id, String addressLine1, String addressline2, String state, String zipCode, String country) {
+	public AddressEntity(long id, String addressLine1, String addressline2, String state, String zipCode,
+			String country) {
 		super();
 		this.id = id;
 		this.addressLine1 = addressLine1;

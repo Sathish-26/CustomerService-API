@@ -23,8 +23,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.context.jdbc.Sql;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.rabobank.customer.model.Address;
-import com.rabobank.customer.model.Customer;
+import com.rabobank.customer.model.AddressEntity;
+import com.rabobank.customer.model.CustomerEntity;
 import com.rabobank.customer.model.CustomerServiceResponse;
 
 @EnableAutoConfiguration
@@ -60,9 +60,9 @@ public class CustomerServiceApiIntegrationTest {
 
 	@Test
 	public void testAddCustomer() {
-		Customer customer = new Customer(0, 7, "Sathish", "Kumar", null, 28, new Address());
-		Customer c = this.restTemplate.postForObject("http://localhost:" + port + "/v1/customers", customer,
-				Customer.class);
+		CustomerEntity customer = new CustomerEntity(0, 7, "Sathish", "Kumar", null, 28, new AddressEntity());
+		CustomerEntity c = this.restTemplate.postForObject("http://localhost:" + port + "/v1/customers", customer,
+				CustomerEntity.class);
 		assertEquals("Sathish", c.getFirstName());
 	}
 
@@ -72,8 +72,8 @@ public class CustomerServiceApiIntegrationTest {
 		acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		Customer customer = this.restTemplate.getForObject("http://localhost:" + port + "/v1/customers/1",
-				Customer.class);
+		CustomerEntity customer = this.restTemplate.getForObject("http://localhost:" + port + "/v1/customers/1",
+				CustomerEntity.class);
 
 		assertTrue(customer.getFirstName().equalsIgnoreCase("Harry"));
 	}
@@ -105,9 +105,9 @@ public class CustomerServiceApiIntegrationTest {
 
 	@Test
 	public void testUpdateAddress() {
-		Address address = new Address(1, "No 35", "Second cross", "KA", "231145", "IN");
-		Customer c = this.restTemplate.patchForObject("http://localhost:" + port + "/v1/customers/1", address,
-				Customer.class);
+		AddressEntity address = new AddressEntity(1, "No 35", "Second cross", "KA", "231145", "IN");
+		CustomerEntity c = this.restTemplate.patchForObject("http://localhost:" + port + "/v1/customers/1", address,
+				CustomerEntity.class);
 		assertEquals("First street", c.getAddress().getAddressLine1());
 	}
 

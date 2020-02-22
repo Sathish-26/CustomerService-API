@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rabobank.customer.business.CustomerApiBusinessServiceImpl;
 import com.rabobank.customer.model.Address;
+import com.rabobank.customer.model.AddressEntity;
 import com.rabobank.customer.model.Customer;
+import com.rabobank.customer.model.CustomerEntity;
 import com.rabobank.customer.repository.CustomerRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,8 +36,8 @@ public class CustomerServiceApiControllerTest {
 	@Test
 	public void whenFindAll_thenReturnCustomersList() {
 		// given
-		Customer customer = new Customer(1, 1, "Sathish", "Kumar", null, 28, new Address());
-		List<Customer> expectedCustomers = Arrays.asList(customer);
+		CustomerEntity customer = new CustomerEntity(1, 1, "Sathish", "Kumar", null, 28, new AddressEntity());
+		List<CustomerEntity> expectedCustomers = Arrays.asList(customer);
 
 		doReturn(expectedCustomers).when(customerRepository).findAll();
 
@@ -48,8 +51,8 @@ public class CustomerServiceApiControllerTest {
 	@Test
 	public void whenFindById_thenReturnCustomer() {
 		// given
-		Customer customer = new Customer(1L, 1, "Sathish", "Kumar", null, 28, new Address());
-		Optional<Customer> customerOptional = Optional.of(customer);
+		CustomerEntity customer = new CustomerEntity(1L, 1, "Sathish", "Kumar", null, 28, new AddressEntity());
+		Optional<CustomerEntity> customerOptional = Optional.of(customer);
 
 		doReturn(customerOptional).when(customerRepository).findById(1L);
 
@@ -61,25 +64,10 @@ public class CustomerServiceApiControllerTest {
 	}
 
 	@Test
-	public void whenFindByFirstName_thenReturnCustomersList() {
-		// given
-		Customer customer = new Customer(1, 1, "Sathish", "Kumar", null, 28, new Address());
-		List<Customer> expectedCustomers = Arrays.asList(customer);
-
-		doReturn(expectedCustomers).when(customerRepository).getByFirstName("Sathish");
-
-		// when
-		List<Customer> actualCustomersList = businessServiceImpl.retrieveCustomerByFirstName("Sathish");
-
-		// then
-		assertThat(actualCustomersList).isEqualTo(expectedCustomers);
-	}
-
-	@Test
 	public void whenFindByFirstAndLastName_thenReturnCustomersList() {
 		// given
-		Customer customer = new Customer(1, 1, "Sathish", "Kumar", null, 28, new Address());
-		List<Customer> expectedCustomers = Arrays.asList(customer);
+		CustomerEntity customer = new CustomerEntity(1, 1, "Sathish", "Kumar", null, 28, new AddressEntity());
+		List<CustomerEntity> expectedCustomers = Arrays.asList(customer);
 
 		doReturn(expectedCustomers).when(customerRepository).getByFirstNameAndLastName("Sathish", "Kumar");
 
@@ -94,10 +82,11 @@ public class CustomerServiceApiControllerTest {
 	@Test
 	public void whenAddNewCustomer_thenReturnCustomer() {
 		// given
-		Customer customer = new Customer(1, 1, "Sathish", "Kumar", null, 28, new Address());
+		CustomerEntity customerEntity = new CustomerEntity(1, 1, "Sathish", "Kumar", null, 28, new AddressEntity());
 
-		doReturn(customer).when(customerRepository).save(customer);
+		doReturn(customerEntity).when(customerRepository).save(customerEntity);
 
+		Customer customer = new Customer();
 		// when
 		Customer actualCustomer = businessServiceImpl.addANewCustomer(customer);
 
@@ -109,10 +98,11 @@ public class CustomerServiceApiControllerTest {
 	public void whenUpdateCustomerAddress_thenReturnUpdatedCustomer() {
 		// given
 
-		Customer customer = new Customer(0, 1, "Sathish", "Kumar", null, 28, null);
-		Address address = new Address(0, "No 35", "Second cross", "KA", "231145", "IN");
+		Customer customer = new Customer(1, "Sathish", "Kumar", 0, new Date(), new Address());
+		Address address = new Address("No 35", "Second cross", "KA", "231145", "IN");
 		customer.setAddress(address);
-		doReturn(customer).when(customerRepository).save(customer);
+		CustomerEntity customerEntity = new CustomerEntity();
+		doReturn(customerEntity).when(customerRepository).save(customerEntity);
 
 		// when
 		Customer actualCustomer = businessServiceImpl.updateCustomerAddress(0, address);

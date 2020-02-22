@@ -1,9 +1,6 @@
 package com.rabobank.customer.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -21,6 +18,9 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "T_CUSTOMER")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Customer implements Serializable {
+public class CustomerEntity implements Serializable {
 
 	/**
 	 * 
@@ -41,8 +41,9 @@ public class Customer implements Serializable {
 	private long id;
 
 	@NotNull
-	@Column(name = "CUSTOMER_ID")
-	private Integer customerId;
+	@Column(name = "CUSTOMER_ID", columnDefinition = "BIGINT DEFAULT nextval('hibernate_sequence')", unique = true, nullable = false, insertable = false, updatable = false)
+	@Generated(value = GenerationTime.INSERT)
+	private long customerId;
 
 	@NotNull
 	@Size(max = 50)
@@ -61,17 +62,17 @@ public class Customer implements Serializable {
 	private Integer age;
 
 	@OneToOne(cascade = CascadeType.PERSIST)
-	private Address address;
+	private AddressEntity address;
 
 	@Version
 	private int version;
 
-	public Customer() {
+	public CustomerEntity() {
 
 	}
 
-	public Customer(long id, Integer customerId, String firstName, String lastName, Date dateOfBirth, Integer age,
-			Address address) {
+	public CustomerEntity(long id, long customerId, String firstName, String lastName, Date dateOfBirth, Integer age,
+			AddressEntity address) {
 		super();
 		this.id = id;
 		this.customerId = customerId;
@@ -90,11 +91,11 @@ public class Customer implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getCustomerId() {
+	public long getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(Integer customerId) {
+	public void setCustomerId(long customerId) {
 		this.customerId = customerId;
 	}
 
@@ -124,15 +125,7 @@ public class Customer implements Serializable {
 
 	public Integer getAge() {
 		if (this.dateOfBirth != null) {
-			Calendar c = Calendar.getInstance();
-			c.setTime(dateOfBirth);
-			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH) + 1;
-			int date = c.get(Calendar.DATE);
-			LocalDate l1 = LocalDate.of(year, month, date);
-			LocalDate now1 = LocalDate.now();
-			Period period = Period.between(l1, now1);
-			age = period.getYears();
+
 		}
 		return age;
 	}
@@ -141,11 +134,11 @@ public class Customer implements Serializable {
 		this.age = age;
 	}
 
-	public Address getAddress() {
+	public AddressEntity getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(AddressEntity address) {
 		this.address = address;
 	}
 

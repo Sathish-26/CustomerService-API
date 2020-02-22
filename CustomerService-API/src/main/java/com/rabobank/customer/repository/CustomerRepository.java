@@ -6,15 +6,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.rabobank.customer.model.Customer;
+import com.rabobank.customer.model.CustomerEntity;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
 
-	@Query("Select c from Customer c where c.firstName like CONCAT('%', ?1, '%')")
-	List<Customer> getByFirstName(String firstName);
-
-	@Query("Select c from Customer c where c.firstName like CONCAT('%', ?1, '%') AND c.lastName like concat('%', ?2, '%')")
-	List<Customer> getByFirstNameAndLastName(String firstName, String lastName);
+	// @Query("Select c from CustomerEntity c where (c.firstName like concat('%',
+	// ?1, '%') AND c.lastName like concat('%', ?2, '%') OR (c.firstName like
+	// concat('%', ?1, '%') OR c.lastName like concat('%', ?2, '%')))")
+	// @Query("Select c from CustomerEntity c where (c.firstName like concat('%',
+	// ?1, '%') OR c.lastName like concat('%', ?2, '%'))")
+	@Query("Select c from CustomerEntity c where (c.firstName = ?1 OR c.lastName = ?2)")
+	List<CustomerEntity> getByFirstNameAndLastName(String firstName, String lastName);
 
 }

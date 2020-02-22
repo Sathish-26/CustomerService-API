@@ -13,8 +13,6 @@ public interface CustomerApiBusinessService {
 
 	Customer retrieveCustomerById(long id);
 
-	List<Customer> retrieveCustomerByFirstName(String firstName);
-
 	List<Customer> retrieveCustomerByFirstNameAndLastName(String firstName, String lastName);
 
 	Customer updateCustomerAddress(long id, Address address);

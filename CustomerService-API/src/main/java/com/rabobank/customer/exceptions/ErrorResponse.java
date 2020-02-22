@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.ObjectError;
 
 public class ErrorResponse {
 
@@ -16,6 +17,15 @@ public class ErrorResponse {
 	public ErrorResponse(HttpStatus httpStatus, String applicationCode, String errorMessage) {
 		ErrorDetail errorDetail = new ErrorDetail(httpStatus, applicationCode, errorMessage);
 		this.addError(errorDetail);
+	}
+
+	public ErrorResponse(HttpStatus httpStatus, String applicationCode, String errorMessage,
+			List<ObjectError> objectErrors) {
+		objectErrors.forEach(error -> {
+			this.addError(new ErrorDetail(httpStatus, applicationCode, error.getDefaultMessage()));
+		});
+//		ErrorDetail errorDetail = new ErrorDetail(httpStatus, applicationCode, errorMessage);
+//		this.addError(errorDetail);
 	}
 
 	public List<ErrorDetail> getErrorDetails() {

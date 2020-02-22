@@ -3,12 +3,13 @@ package com.rabobank.customer.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +23,8 @@ import com.rabobank.customer.exceptions.CustomerServiceApiException;
 import com.rabobank.customer.exceptions.ExceptionConstants;
 import com.rabobank.customer.model.Address;
 import com.rabobank.customer.model.Customer;
+import com.rabobank.customer.model.CustomerEntity;
 import com.rabobank.customer.model.CustomerServiceResponse;
-import com.rabobank.customer.utils.ValidationUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +34,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @Api(value = "CustomerService")
 @RequestMapping("/${api.version}")
+@Validated
 public class CustomerServiceApiController {
 
 	private static final Logger logger = LoggerFactory.getLogger(CustomerServiceApiController.class);
@@ -40,7 +42,7 @@ public class CustomerServiceApiController {
 	@Autowired
 	private CustomerApiBusinessService customerApibusinessService;
 
-	@ApiOperation(value = "Add a new customer", response = Customer.class)
+	@ApiOperation(value = "Add a new customer", response = CustomerEntity.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully added the customer"),
 			@ApiResponse(code = 401, message = "You are not authorized to add a customer"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
@@ -83,39 +85,26 @@ public class CustomerServiceApiController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully retrieved the customers list"),
 			@ApiResponse(code = 401, message = "You are not authorized to retrieve all customer"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
-	@RequestMapping(value = "/customers/name", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/customers/search", method = RequestMethod.GET, produces = "application/json")
 	public CustomerServiceResponse retrieveCustomersByName(
-			@RequestParam(value = "firstName", required = true) String firstName,
-			@RequestParam(value = "lastName", required = false) String lastName) {
+			@RequestParam(value = "firstName", required = false) @Size(min = 2, max = 50, message = "First name should be between 2 and 50 chars long") String firstName,
+			@RequestParam(value = "lastName", required = false) @Size(min = 2, max = 50, message = "Last name should be between 2 and 50 chars long") String lastName) {
 		logger.info("Entered retrieveCustomersByName with firstname {} and lastName: {}", firstName, lastName);
 		List<Customer> customersList = null;
-		if (StringUtils.isNotBlank(firstName) && StringUtils.isBlank(lastName)) {
-			ValidationUtils.validateInput(firstName);
-			try {
-				customersList = customerApibusinessService.retrieveCustomerByFirstName(firstName);
-			} catch (Exception e) {
-				logger.error(ExceptionConstants.RETRIEVE_CUSTOMER_BY_FIRST_NAME_EXCEPTION_MSG, e);
-				throw new CustomerServiceApiException("retrieveCustomersByName",
-						ExceptionConstants.RETRIEVE_CUSTOMER_BY_FIRST_NAME_EXCEPTION_MSG,
-						HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+
+		try {
+			customersList = customerApibusinessService.retrieveCustomerByFirstNameAndLastName(firstName, lastName);
+		} catch (Exception e) {
+			logger.error(ExceptionConstants.RETRIEVE_CUSTOMER_BY_NAME_EXCEPTION_MSG, e);
+			throw new CustomerServiceApiException("retrieveCustomersByName",
+					ExceptionConstants.RETRIEVE_CUSTOMER_BY_NAME_EXCEPTION_MSG, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if (StringUtils.isNotBlank(firstName) && StringUtils.isNotBlank(lastName)) {
-			ValidationUtils.validateInput(firstName);
-			ValidationUtils.validateInput(lastName);
-			try {
-				customersList = customerApibusinessService.retrieveCustomerByFirstNameAndLastName(firstName, lastName);
-			} catch (Exception e) {
-				logger.error(ExceptionConstants.RETRIEVE_CUSTOMER_BY_NAME_EXCEPTION_MSG, e);
-				throw new CustomerServiceApiException("retrieveCustomersByName",
-						ExceptionConstants.RETRIEVE_CUSTOMER_BY_NAME_EXCEPTION_MSG, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-		}
+
 		logger.info("Completed retrieveCustomersByName");
 		return new CustomerServiceResponse(customersList);
 	}
 
-	@ApiOperation(value = "Retrieves a customer by Id", response = Customer.class)
+	@ApiOperation(value = "Retrieves a customer by Id", response = CustomerEntity.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully retrieved the customer"),
 			@ApiResponse(code = 404, message = "Customer Not found"),
 			@ApiResponse(code = 401, message = "You are not authorized to retrieve a customer"),
@@ -138,7 +127,7 @@ public class CustomerServiceApiController {
 		return customer;
 	}
 
-	@ApiOperation(value = "Updates the adress of the customer", response = Customer.class)
+	@ApiOperation(value = "Updates the adress of the customer", response = CustomerEntity.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully updated the address the customer"),
 			@ApiResponse(code = 401, message = "You are not authorized to update the address of the customer"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
