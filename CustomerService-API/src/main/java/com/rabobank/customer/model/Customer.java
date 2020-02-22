@@ -21,11 +21,10 @@ public class Customer {
 	@Size(min = 1, max = 50, message = "Last Name should be between 1 and 50 chars long")
 	@Pattern(regexp = "[A-Za-z\\W]+", message = "Last Name should not contain any special characters")
 	private String lastName;
-
 	@JsonInclude(value = JsonInclude.Include.NON_NULL)
 	private Integer age;
 
-	@NotNull(message = "Date of birth cannot be blank")
+	@NotNull(message = "Date of birath cannot be blank")
 	@Past
 	@JsonInclude(value = JsonInclude.Include.NON_NULL)
 	private Date dateOfBirth;
@@ -94,6 +93,12 @@ public class Customer {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName + ", age="
+				+ age + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
 	}
 
 }

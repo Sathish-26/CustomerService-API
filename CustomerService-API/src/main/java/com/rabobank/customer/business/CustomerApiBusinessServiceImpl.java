@@ -36,6 +36,7 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 
 	@Override
 	public Customer addANewCustomer(Customer customer) {
+		logger.info("Started the execution of addANewCustomer with customer details - {}", customer);
 		CustomerEntity customerEntity = translateCustomerToCustomerEntity(customer);
 		CustomerEntity custEntity = null;
 		try {
@@ -45,29 +46,35 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 			throw e;
 		}
 		Customer c = translateCustomerEntityToCustomer(custEntity);
+		logger.info("completed the execution of addANewCustomer");
 		return c;
 	}
 
 	@Override
 	public List<Customer> retrieveAllCustomers() {
+		logger.info("Started the execution of retrieveAllCustomers");
 		List<Customer> customersList = new ArrayList<>();
 		List<CustomerEntity> customerEntityList = customerRepository.findAll();
 		customerEntityList.forEach(customerEntity -> {
 			customersList.add(translateCustomerEntityToCustomer(customerEntity));
 		});
+		logger.info("Completed the execution of retrieveAllCustomers");
 		return customersList;
 	}
 
 	@Override
 	public Customer retrieveCustomerById(long id) {
+		logger.info("Started the execution of retrieveCustomerById");
 		CustomerEntity customerEntity = customerRepository.findById(id)
 				.orElseThrow(() -> new CustomerNotFoundException("retrieveCustomerById",
 						"Customer Not found for the given id", HttpStatus.NOT_FOUND));
+		logger.info("Completed the execution of retrieveCustomerById");
 		return translateCustomerEntityToCustomer(customerEntity);
 	}
 
 	@Override
 	public List<Customer> retrieveCustomerByFirstNameAndLastName(String firstName, String lastName) {
+		logger.info("Started the execution of retrieveCustomerByFirstNameAndLastName");
 		List<CustomerEntity> customerEntityList = null;
 		List<Customer> customerList = new ArrayList<>();
 		try {
@@ -81,12 +88,13 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 			logger.error("Exception during getByFirstNameAndLastName call", e);
 			throw e;
 		}
-
+		logger.info("Completed the execution of retrieveCustomerByFirstNameAndLastName");
 		return customerList;
 	}
 
 	@Override
 	public Customer updateCustomerAddress(long id, Address address) {
+		logger.info("Started the execution of updateCustomerAddress with id- {}", id);
 		Optional<CustomerEntity> customerEntityOptional = null;
 		CustomerEntity customerEntity = null;
 		Customer customer = null;
@@ -102,12 +110,15 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 			logger.error("Exception during findbyId call", e);
 			throw e;
 		}
+		logger.info("Completed the execution of updateCustomerAddress");
 		return customer;
 	}
 
 	private CustomerEntity translateCustomerToCustomerEntity(Customer customer) {
+		logger.info("Started execution of translateCustomerToCustomerEntity");
 		CustomerEntity customerEntity = null;
 		if (isValidDate(customer.getDateOfBirth())) {
+			logger.debug("Valid date of birth");
 			customerEntity = new CustomerEntity();
 			customerEntity.setAddress(translateAddressToAddressEntity(customer.getAddress()));
 			customerEntity.setDateOfBirth(customer.getDateOfBirth());
@@ -117,20 +128,24 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 			throw new CustomerServiceApiException("translateCustomerToCustomerEntity", "Date is invalid",
 					HttpStatus.BAD_REQUEST);
 		}
+		logger.info("Completed execution of translateCustomerToCustomerEntity");
 		return customerEntity;
 	}
 
 	private AddressEntity translateAddressToAddressEntity(Address address) {
+		logger.info("Started execution of translateAddressToAddressEntity");
 		AddressEntity addressEntity = new AddressEntity();
 		addressEntity.setAddressLine1(address.getAddressLine1());
 		addressEntity.setAddressline2(address.getAddressline2());
 		addressEntity.setCountry(address.getCountry());
 		addressEntity.setState(address.getState());
 		addressEntity.setZipCode(address.getZipCode());
+		logger.info("Completed execution of translateAddressToAddressEntity");
 		return addressEntity;
 	}
 
 	private boolean isValidDate(Date date) {
+		System.out.println("Date in business service " + date);
 		Pattern p = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String dateStr = sdf.format(date);
@@ -139,6 +154,7 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 	}
 
 	private Customer translateCustomerEntityToCustomer(CustomerEntity customerEntity) {
+		logger.info("Started execution of translateCustomerEntityToCustomer with customerEntity - {}", customerEntity);
 		Customer customer = null;
 		if (customerEntity != null) {
 			customer = new Customer();
@@ -150,10 +166,12 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 			customer.setLastName(customerEntity.getLastName());
 			customer.setAddress(translateAddressEntityToAddress(customerEntity.getAddress()));
 		}
+		logger.info("Completed execution of translateCustomerEntityToCustomer");
 		return customer;
 	}
 
 	private Address translateAddressEntityToAddress(AddressEntity addressEntity) {
+		logger.info("Started execution of translateAddressEntityToAddress");
 		Address address = null;
 		if (addressEntity != null) {
 			address = new Address();
@@ -163,6 +181,7 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 			address.setZipCode(addressEntity.getZipCode());
 			address.setCountry(addressEntity.getCountry());
 		}
+		logger.info("Completed execution of translateAddressEntityToAddress");
 		return address;
 	}
 

@@ -131,7 +131,7 @@ public class CustomerServiceApiController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully updated the address the customer"),
 			@ApiResponse(code = 401, message = "You are not authorized to update the address of the customer"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
-	@RequestMapping(value = "/customers/{id}", method = RequestMethod.PATCH, consumes = "application/json")
+	@RequestMapping(value = "/customers/{id}", method = RequestMethod.PUT, consumes = "application/json")
 	public Customer updateCustomerAddress(@PathVariable long id, @Valid @RequestBody Address address) {
 		logger.info("Entered updateCustomerAddress with id {} and address {}", id, address);
 		Customer customer = null;
