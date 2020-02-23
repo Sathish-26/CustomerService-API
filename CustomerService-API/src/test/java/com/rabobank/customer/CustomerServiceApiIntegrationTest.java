@@ -68,7 +68,7 @@ public class CustomerServiceApiIntegrationTest {
 	public void testAllCustomers() {
 
 		CustomerServiceResponse customerServiceResponse = this.restTemplate
-				.getForObject("http://localhost:" + port + "/v1/customers", CustomerServiceResponse.class);
+				.getForObject("http://localhost:" + port + "/customerApp/v1/customers", CustomerServiceResponse.class);
 
 		assertTrue(customerServiceResponse.getCustomersList().size() == 5);
 	}
@@ -78,8 +78,8 @@ public class CustomerServiceApiIntegrationTest {
 		Customer customer = new Customer(1, 1, "Sathish", "Kumar", 0, date, address);
 		HttpEntity<Customer> requestEntity = new HttpEntity<Customer>(customer);
 		ResponseEntity<Customer> c = null;
-		c = this.restTemplate.exchange("http://localhost:" + port + "/v1/customers", HttpMethod.POST, requestEntity,
-				Customer.class);
+		c = this.restTemplate.exchange("http://localhost:" + port + "/customerApp/v1/customers", HttpMethod.POST,
+				requestEntity, Customer.class);
 		assertEquals("Sathish", c.getBody().getFirstName());
 	}
 
@@ -89,8 +89,8 @@ public class CustomerServiceApiIntegrationTest {
 		acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		CustomerEntity customer = this.restTemplate.getForObject("http://localhost:" + port + "/v1/customers/1",
-				CustomerEntity.class);
+		CustomerEntity customer = this.restTemplate
+				.getForObject("http://localhost:" + port + "/customerApp/v1/customers/1", CustomerEntity.class);
 
 		assertTrue(customer.getFirstName().equalsIgnoreCase("Harry"));
 	}
@@ -102,7 +102,7 @@ public class CustomerServiceApiIntegrationTest {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		CustomerServiceResponse customerServiceResponse = this.restTemplate.getForObject(
-				"http://localhost:" + port + "/v1/customers/search?firstName=Sathish&lastName=Kumar",
+				"http://localhost:" + port + "/customerApp/v1/customers/search?firstName=Sathish&lastName=Kumar",
 				CustomerServiceResponse.class);
 		assertTrue(customerServiceResponse.getCustomersList().size() != 1);
 	}
@@ -110,8 +110,9 @@ public class CustomerServiceApiIntegrationTest {
 	@Test
 	public void testUpdateAddress() {
 		HttpEntity<Address> requestEntity = new HttpEntity<Address>(address);
-		ResponseEntity<Customer> c = this.restTemplate.exchange("http://localhost:" + port + "/v1/customers/1",
-				HttpMethod.PUT, requestEntity, Customer.class);
+		ResponseEntity<Customer> c = this.restTemplate.exchange(
+				"http://localhost:" + port + "/customerApp/v1/customers/1", HttpMethod.PUT, requestEntity,
+				Customer.class);
 		assertEquals("New Apartments", c.getBody().getAddress().getAddressLine1());
 	}
 

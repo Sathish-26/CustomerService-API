@@ -3,7 +3,8 @@ api:
 
 server:
   port: 8082
-  context-path: /rabobank
+  servlet:
+    context-path: /customerApp
 
 spring:
   datasource:

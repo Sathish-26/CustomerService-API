@@ -20,8 +20,9 @@ public class SwaggerConfiguration {
 
 	@Bean
 	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
-				.paths(PathSelectors.any()).build().apiInfo(metaData());
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.rabobank.customer.controller"))
+				.paths(PathSelectors.regex("/v1/customers.*")).build().apiInfo(metaData());
 	}
 
 	private ApiInfo metaData() {

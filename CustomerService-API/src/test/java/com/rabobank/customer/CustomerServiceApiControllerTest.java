@@ -59,7 +59,7 @@ public class CustomerServiceApiControllerTest {
 
 	private Customer customer;
 
-	private String baseUrl = "http://localhost:8082/raboabank/v1/customers";
+	private String baseUrl = "http://localhost:8082/customerApp/v1/customers";
 
 	@Before()
 	public void init() throws ParseException {
