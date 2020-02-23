@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.rabobank.customer.business.CustomerApiBusinessServiceImpl;
@@ -24,9 +26,8 @@ import com.rabobank.customer.model.Customer;
 import com.rabobank.customer.model.CustomerEntity;
 import com.rabobank.customer.repository.CustomerRepository;
 
-//@ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
-public class CustomerServiceApiControllerTest {
+public class CustomerApiBusinessServiceTest {
 
 	@Mock
 	private CustomerRepository customerRepository;
@@ -42,6 +43,7 @@ public class CustomerServiceApiControllerTest {
 
 	@Before()
 	public void init() throws ParseException {
+		MockitoAnnotations.initMocks(this);
 		String date = "1990-01-01";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		this.date = sdf.parse(date);
@@ -52,7 +54,6 @@ public class CustomerServiceApiControllerTest {
 	@Test
 	public void whenFindAll_thenReturnCustomersList() {
 		// given
-		System.out.println("Date in customersList " + date);
 		CustomerEntity customer = new CustomerEntity(1, 1, "Sathish", "Kumar", date, 28, addressEntity);
 		List<CustomerEntity> expectedCustomers = Arrays.asList(customer);
 
@@ -101,10 +102,10 @@ public class CustomerServiceApiControllerTest {
 		// given
 		CustomerEntity customerEntity = new CustomerEntity(1, 1, "Sathish", "Kumar", date, 28, addressEntity);
 
-		doReturn(customerEntity).when(customerRepository).save(customerEntity);
+		doReturn(customerEntity).when(customerRepository).save(Mockito.any(CustomerEntity.class));
 
-		Customer customer = new Customer(1, "Sathish", "Kumar", 0, date, address);
-		
+		Customer customer = new Customer(1, 1, "Sathish", "Kumar", 0, date, address);
+
 		// when
 		Customer actualCustomer = businessServiceImpl.addANewCustomer(customer);
 
@@ -114,16 +115,20 @@ public class CustomerServiceApiControllerTest {
 
 	@Test
 	public void whenUpdateCustomerAddress_thenReturnUpdatedCustomer() {
-		// given
 
-		Customer customer = new Customer(1, "Sathish", "Kumar", 0, date, address);
+		// given
 		CustomerEntity customerEntity = new CustomerEntity(1, 1, "Sathish", "Kumar", date, 28, addressEntity);
+		Optional<CustomerEntity> customerEntityOptional = Optional.of(customerEntity);
+
+		doReturn(customerEntityOptional).when(customerRepository).findById(1L);
+
 		doReturn(customerEntity).when(customerRepository).save(customerEntity);
 
 		// when
-		Customer actualCustomer = businessServiceImpl.updateCustomerAddress(1, address);
+		Customer actualCustomer = businessServiceImpl.updateCustomerAddress(customerEntity.getCustomerId(), address);
 
 		// then
-		assertThat(actualCustomer.getAddress().getCountry()).isEqualTo(customer.getAddress().getCountry());
+		assertThat(actualCustomer.getAddress().getCountry())
+				.isEqualTo(customerEntityOptional.get().getAddress().getCountry());
 	}
 }

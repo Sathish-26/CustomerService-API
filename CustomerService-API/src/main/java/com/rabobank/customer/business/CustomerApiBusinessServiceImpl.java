@@ -38,13 +38,8 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 	public Customer addANewCustomer(Customer customer) {
 		logger.info("Started the execution of addANewCustomer with customer details - {}", customer);
 		CustomerEntity customerEntity = translateCustomerToCustomerEntity(customer);
-		CustomerEntity custEntity = null;
-		try {
-			custEntity = customerRepository.save(customerEntity);
-		} catch (Exception e) {
-			logger.error("Exception during addANewCustomer call", e);
-			throw e;
-		}
+		CustomerEntity custEntity = customerRepository.save(customerEntity);
+
 		Customer c = translateCustomerEntityToCustomer(custEntity);
 		logger.info("completed the execution of addANewCustomer");
 		return c;
@@ -107,7 +102,7 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 				customer = translateCustomerEntityToCustomer(custEntity);
 			}
 		} catch (Exception e) {
-			logger.error("Exception during findbyId call", e);
+			logger.error("Exception during updateCustomerAddress call", e);
 			throw e;
 		}
 		logger.info("Completed the execution of updateCustomerAddress");

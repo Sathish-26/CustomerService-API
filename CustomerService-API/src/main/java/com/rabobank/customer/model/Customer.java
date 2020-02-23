@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class Customer {
 
+	private long id;
+
 	private long customerId;
 
 	@Size(min = 1, max = 50, message = "First Name should be between 1 and 50 chars long")
@@ -36,15 +38,24 @@ public class Customer {
 
 	}
 
-	public Customer(long customerId, String firstName, String lastName, Integer age, Date dateOfBirth,
+	public Customer(long id, long customerId, String firstName, String lastName, Integer age, Date dateOfBirth,
 			Address address) {
 		super();
+		this.id = id;
 		this.customerId = customerId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 		this.dateOfBirth = dateOfBirth;
 		this.address = address;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public Date getDateOfBirth() {
@@ -96,9 +107,34 @@ public class Customer {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (customerId ^ (customerId >>> 32));
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Customer other = (Customer) obj;
+		if (customerId != other.customerId)
+			return false;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
-		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName + ", age="
-				+ age + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
+		return "Customer [id=" + id + ", customerId=" + customerId + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", age=" + age + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
 	}
 
 }

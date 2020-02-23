@@ -23,7 +23,6 @@ import com.rabobank.customer.exceptions.CustomerServiceApiException;
 import com.rabobank.customer.exceptions.ExceptionConstants;
 import com.rabobank.customer.model.Address;
 import com.rabobank.customer.model.Customer;
-import com.rabobank.customer.model.CustomerEntity;
 import com.rabobank.customer.model.CustomerServiceResponse;
 
 import io.swagger.annotations.Api;
@@ -42,7 +41,7 @@ public class CustomerServiceApiController {
 	@Autowired
 	private CustomerApiBusinessService customerApibusinessService;
 
-	@ApiOperation(value = "Add a new customer", response = CustomerEntity.class)
+	@ApiOperation(value = "Add a new customer", response = Customer.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully added the customer"),
 			@ApiResponse(code = 401, message = "You are not authorized to add a customer"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
@@ -104,7 +103,7 @@ public class CustomerServiceApiController {
 		return new CustomerServiceResponse(customersList);
 	}
 
-	@ApiOperation(value = "Retrieves a customer by Id", response = CustomerEntity.class)
+	@ApiOperation(value = "Retrieves a customer by Id", response = Customer.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully retrieved the customer"),
 			@ApiResponse(code = 404, message = "Customer Not found"),
 			@ApiResponse(code = 401, message = "You are not authorized to retrieve a customer"),
@@ -127,7 +126,7 @@ public class CustomerServiceApiController {
 		return customer;
 	}
 
-	@ApiOperation(value = "Updates the adress of the customer", response = CustomerEntity.class)
+	@ApiOperation(value = "Updates the adress of the customer", response = Customer.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully updated the address the customer"),
 			@ApiResponse(code = 401, message = "You are not authorized to update the address of the customer"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })

@@ -116,4 +116,60 @@ public class AddressEntity implements Serializable {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((addressLine1 == null) ? 0 : addressLine1.hashCode());
+		result = prime * result + ((addressline2 == null) ? 0 : addressline2.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AddressEntity other = (AddressEntity) obj;
+		if (addressLine1 == null) {
+			if (other.addressLine1 != null)
+				return false;
+		} else if (!addressLine1.equals(other.addressLine1))
+			return false;
+		if (addressline2 == null) {
+			if (other.addressline2 != null)
+				return false;
+		} else if (!addressline2.equals(other.addressline2))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (state == null) {
+			if (other.state != null)
+				return false;
+		} else if (!state.equals(other.state))
+			return false;
+		if (zipCode == null) {
+			if (other.zipCode != null)
+				return false;
+		} else if (!zipCode.equals(other.zipCode))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "AddressEntity [id=" + id + ", addressLine1=" + addressLine1 + ", addressline2=" + addressline2
+				+ ", state=" + state + ", zipCode=" + zipCode + ", country=" + country + "]";
+	}
+
 }

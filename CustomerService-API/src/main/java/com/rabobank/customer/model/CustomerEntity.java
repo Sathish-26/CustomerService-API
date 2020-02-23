@@ -143,6 +143,31 @@ public class CustomerEntity implements Serializable {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (customerId ^ (customerId >>> 32));
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CustomerEntity other = (CustomerEntity) obj;
+		if (customerId != other.customerId)
+			return false;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", customerId=" + customerId + ", firstName=" + firstName + ", lastName="
 				+ lastName + ", dateOfBirth=" + dateOfBirth + ", age=" + age + ", address=" + address + ", version="
