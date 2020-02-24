@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rabobank.customer.business.CustomerApiBusinessService;
 import com.rabobank.customer.exceptions.CustomerNotFoundException;
 import com.rabobank.customer.exceptions.CustomerServiceApiException;
-import com.rabobank.customer.exceptions.ExceptionConstants;
 import com.rabobank.customer.model.Address;
 import com.rabobank.customer.model.Customer;
 import com.rabobank.customer.model.CustomerServiceResponse;
+import com.rabobank.customer.utils.ExceptionConstants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

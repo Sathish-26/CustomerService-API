@@ -138,7 +138,7 @@ public class CustomerServiceApiControllerTest {
 		when(businessService.retrieveCustomerByFirstNameAndLastName("Sathish", "Kumar")).thenReturn(customerList);
 
 		MockHttpServletRequestBuilder mockHttpReqBuilder = MockMvcRequestBuilders
-				.get(baseUrl + "search?firstName=Sathish&lastName=Kumar").accept(MediaType.APPLICATION_JSON);
+				.get(baseUrl + "/search?firstName=Sathish&lastName=Kumar").accept(MediaType.APPLICATION_JSON);
 		mvc.perform(mockHttpReqBuilder).andExpect(status().is2xxSuccessful())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.customersList").exists());
 
@@ -173,7 +173,6 @@ public class CustomerServiceApiControllerTest {
 		} catch (JsonProcessingException e) {
 
 		}
-		System.out.println(jsonString);
 		return jsonString;
 	}
 

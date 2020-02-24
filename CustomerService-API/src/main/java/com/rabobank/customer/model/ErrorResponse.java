@@ -1,4 +1,4 @@
-package com.rabobank.customer.exceptions;
+package com.rabobank.customer.model;
 
 import java.util.ArrayList;
 import java.util.List;

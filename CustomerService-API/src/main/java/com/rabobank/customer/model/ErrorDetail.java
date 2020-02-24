@@ -1,4 +1,4 @@
-package com.rabobank.customer.exceptions;
+package com.rabobank.customer.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

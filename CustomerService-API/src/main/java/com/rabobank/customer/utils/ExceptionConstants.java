@@ -1,4 +1,4 @@
-package com.rabobank.customer.exceptions;
+package com.rabobank.customer.utils;
 
 public class ExceptionConstants {
 

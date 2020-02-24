@@ -18,4 +18,4 @@ Functionalities supported:
 5. Update the address of the customer - To update the address of the customer.
 
 Swagger Endpoint:
-http://localhost:8082/customerApp/swagge-ui.html
+http://localhost:8082/customerApp/swagger-ui.html

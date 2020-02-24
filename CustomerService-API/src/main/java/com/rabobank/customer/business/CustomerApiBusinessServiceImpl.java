@@ -34,6 +34,14 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 	@Autowired
 	public CustomerRepository customerRepository;
 
+	/*
+	 * Adds the new customer in the system
+	 * 
+	 * @param - Customer
+	 * 
+	 * @returns - New customer details
+	 * 
+	 */
 	@Override
 	public Customer addANewCustomer(Customer customer) {
 		logger.info("Started the execution of addANewCustomer with customer details - {}", customer);
@@ -45,6 +53,12 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 		return c;
 	}
 
+	/*
+	 * Retrieves all customer details from the system
+	 * 
+	 * @returns - List<Customer>
+	 * 
+	 */
 	@Override
 	public List<Customer> retrieveAllCustomers() {
 		logger.info("Started the execution of retrieveAllCustomers");
@@ -57,6 +71,14 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 		return customersList;
 	}
 
+	/*
+	 * Retrieves customer details based on Id
+	 * 
+	 * @Param - id of the customer
+	 * 
+	 * @returns - Customer
+	 * 
+	 */
 	@Override
 	public Customer retrieveCustomerById(long id) {
 		logger.info("Started the execution of retrieveCustomerById");
@@ -67,6 +89,12 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 		return translateCustomerEntityToCustomer(customerEntity);
 	}
 
+	/*
+	 * Retrieves all customer details based on first/last name.
+	 * 
+	 * @returns - List<Customer>
+	 * 
+	 */
 	@Override
 	public List<Customer> retrieveCustomerByFirstNameAndLastName(String firstName, String lastName) {
 		logger.info("Started the execution of retrieveCustomerByFirstNameAndLastName");
@@ -87,6 +115,14 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 		return customerList;
 	}
 
+	/*
+	 * Updates the address of the customer
+	 * 
+	 * @Params id - id of the customer, Address to be updated
+	 * 
+	 * @returns - Customer
+	 * 
+	 */
 	@Override
 	public Customer updateCustomerAddress(long id, Address address) {
 		logger.info("Started the execution of updateCustomerAddress with id- {}", id);
@@ -140,7 +176,6 @@ public class CustomerApiBusinessServiceImpl implements CustomerApiBusinessServic
 	}
 
 	private boolean isValidDate(Date date) {
-		System.out.println("Date in business service " + date);
 		Pattern p = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String dateStr = sdf.format(date);
