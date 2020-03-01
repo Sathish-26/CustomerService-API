@@ -9,13 +9,13 @@ public class Address {
 
 	private String addressline2;
 
-	@Size(min = 2, max = 15, message = "State should be between 5 and 15 chars long")
+	@Size(min = 2, max = 15, message = "State should be between 2 and 15 chars long")
 	private String state;
 
 	@Size(min = 6, max = 6, message = "ZipCode should be 6 chars long")
 	private String zipCode;
 
-	@Size(min = 2, max = 15, message = "Country should be between 5 and 15 chars long")
+	@Size(min = 2, max = 15, message = "Country should be between 2 and 15 chars long")
 	private String country;
 
 	public Address() {

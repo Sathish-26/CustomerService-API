@@ -10,10 +10,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import javax.annotation.PostConstruct;
+
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +41,8 @@ import com.rabobank.customer.repository.CustomerRepository;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CustomerServiceApiApplication.class)
 @AutoConfigureMockMvc
-public class CustomerServiceApiControllerTest {
+@TestMethodOrder(value = OrderAnnotation.class)
+class CustomerServiceApiControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
@@ -46,7 +50,7 @@ public class CustomerServiceApiControllerTest {
 	@Mock
 	private CustomerRepository customerRepository;
 
-	@InjectMocks
+	@Mock
 	private CustomerApiBusinessServiceImpl businessService;
 
 	private Date date;
@@ -59,25 +63,27 @@ public class CustomerServiceApiControllerTest {
 
 	private Customer customer;
 
-	private String baseUrl = "http://localhost:8082/customerApp/v1/customers";
+	private String baseUrl = "/v1/customers";
 
-	@Before()
+	@PostConstruct
 	public void init() throws ParseException {
-		String date = "1990-01-01";
+		String dateStr = "1990-01-01";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		this.date = sdf.parse(date);
+		this.date = sdf.parse(dateStr);
 		this.address = new Address("New Apartments", "4th cross street", "KA", "570016", "IN");
 		this.addressEntity = new AddressEntity(1L, "New Apartments", "4th cross street", "KA", "570016", "IN");
 		this.customerEntity = new CustomerEntity(1L, 1L, "Sathish", "Kumar", this.date, 28, this.addressEntity);
-		customer = new Customer(1L, 1L, "Sathish", "Kumar", 0, this.date, this.address);
+		this.customer = new Customer("Sathish", "Kumar", this.date, address);
 	}
 
 	@Test
+	@Order(1)
 	public void whenaddNewCustomer_thenReturnNewCustomer() throws Exception {
 
 		when(customerRepository.save(Mockito.any(CustomerEntity.class))).thenReturn(customerEntity);
 
 		when(businessService.addANewCustomer(customer)).thenReturn(customer);
+
 		MockHttpServletRequestBuilder mockHttpReqBuilder = MockMvcRequestBuilders.post(baseUrl)
 				.content(asJsonString(customer)).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON);
@@ -86,6 +92,7 @@ public class CustomerServiceApiControllerTest {
 	}
 
 	@Test
+	@Order(2)
 	public void whenFindAll_thenReturnCustomersList() throws Exception {
 
 		// given
@@ -100,14 +107,15 @@ public class CustomerServiceApiControllerTest {
 		when(businessService.retrieveAllCustomers()).thenReturn(customerList);
 
 		MockHttpServletRequestBuilder mockHttpReqBuilder = MockMvcRequestBuilders.get(baseUrl)
-				.content(asJsonString(customer)).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON);
+
 		mvc.perform(mockHttpReqBuilder).andExpect(status().is2xxSuccessful())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.customersList").isNotEmpty());
 
 	}
 
 	@Test
+	@Order(3)
 	public void whenFindById_thenReturnCustomer() throws Exception {
 
 		Optional<CustomerEntity> customerEntityOptional = Optional.of(customerEntity);
@@ -115,16 +123,18 @@ public class CustomerServiceApiControllerTest {
 		// given
 		when(customerRepository.findById(1L)).thenReturn(customerEntityOptional);
 
-		when(businessService.retrieveCustomerById(1)).thenReturn(customer);
+		when(businessService.retrieveCustomerById(1L)).thenReturn(customer);
 
 		MockHttpServletRequestBuilder mockHttpReqBuilder = MockMvcRequestBuilders.get(baseUrl + "/1")
 				.accept(MediaType.APPLICATION_JSON);
+
 		mvc.perform(mockHttpReqBuilder).andExpect(status().is2xxSuccessful())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.customerId").exists());
 
 	}
 
 	@Test
+	@Order(4)
 	public void whenFindByFirstAndLastName_thenReturnCustomersList() throws Exception {
 		List<CustomerEntity> customerEntityList = new ArrayList<>();
 		customerEntityList.add(customerEntity);
@@ -139,12 +149,14 @@ public class CustomerServiceApiControllerTest {
 
 		MockHttpServletRequestBuilder mockHttpReqBuilder = MockMvcRequestBuilders
 				.get(baseUrl + "/search?firstName=Sathish&lastName=Kumar").accept(MediaType.APPLICATION_JSON);
+
 		mvc.perform(mockHttpReqBuilder).andExpect(status().is2xxSuccessful())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.customersList").exists());
 
 	}
 
 	@Test
+	@Order(5)
 	public void whenUpdateCustomerAddress_thenReturnUpdatedCustomer() throws Exception {
 
 		// given

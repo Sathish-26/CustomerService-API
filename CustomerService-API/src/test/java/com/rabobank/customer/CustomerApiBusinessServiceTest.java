@@ -104,7 +104,7 @@ public class CustomerApiBusinessServiceTest {
 
 		doReturn(customerEntity).when(customerRepository).save(Mockito.any(CustomerEntity.class));
 
-		Customer customer = new Customer(1, 1, "Sathish", "Kumar", 0, date, address);
+		Customer customer = new Customer("Sathish", "Kumar", date, address);
 
 		// when
 		Customer actualCustomer = businessServiceImpl.addANewCustomer(customer);
@@ -121,8 +121,6 @@ public class CustomerApiBusinessServiceTest {
 		Optional<CustomerEntity> customerEntityOptional = Optional.of(customerEntity);
 
 		doReturn(customerEntityOptional).when(customerRepository).findById(1L);
-
-		doReturn(customerEntity).when(customerRepository).save(customerEntity);
 
 		// when
 		Customer actualCustomer = businessServiceImpl.updateCustomerAddress(customerEntity.getCustomerId(), address);

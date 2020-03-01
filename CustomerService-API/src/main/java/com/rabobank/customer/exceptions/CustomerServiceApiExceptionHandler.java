@@ -1,11 +1,6 @@
 package com.rabobank.customer.exceptions;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,27 +46,7 @@ public class CustomerServiceApiExceptionHandler extends ResponseEntityExceptionH
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		logger.info("Entered handleMethodArgumentNotValid");
 		List<ObjectError> objectErrors = ex.getBindingResult().getAllErrors();
-		ErrorResponse errorResponse = new ErrorResponse(status, "addNewCustomer", ex.getLocalizedMessage(),
-				objectErrors);
-
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.APPLICATION_JSON);
-		logger.info("After setting up the error response");
-		return new ResponseEntity<Object>(errorResponse, responseHeaders, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(ConstraintViolationException.class)
-	protected ResponseEntity<Object> handleConstraintValidationException(ConstraintViolationException ex) {
-		logger.info("Entered handleMethodArgumentNotValid");
-		Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
-		List<ObjectError> objectErrors = new ArrayList<ObjectError>();
-
-		constraintViolations.forEach(constraint -> {
-			ObjectError objectError = new ObjectError(constraint.getInvalidValue().toString(), constraint.getMessage());
-			objectErrors.add(objectError);
-		});
-
-		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "retrievebyName",
+		ErrorResponse errorResponse = new ErrorResponse(status, "One or More params are not valid",
 				ex.getLocalizedMessage(), objectErrors);
 
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -95,4 +70,5 @@ public class CustomerServiceApiExceptionHandler extends ResponseEntityExceptionH
 		return new ResponseEntity<Object>(errorResponse, headers, customerNotFoundException.getHttpStatus());
 
 	}
+
 }

@@ -31,21 +31,21 @@ public class AddressEntity implements Serializable {
 	private long id;
 
 	@NotNull
-	@Size(max = 50)
+	@Size(max = 75)
 	@Column(name = "ADDR_LINE1")
 	private String addressLine1;
 
-	@Size(max = 50)
+	@Size(max = 75)
 	@Column(name = "ADDR_LINE2")
 	private String addressline2;
 
 	@NotNull
-	@Size(max = 20)
+	@Size(max = 15)
 	@Column(name = "STATE")
 	private String state;
 
 	@NotNull
-	@Size(max = 10)
+	@Size(max = 6)
 	@Column(name = "ZIP_CD")
 	private String zipCode;
 

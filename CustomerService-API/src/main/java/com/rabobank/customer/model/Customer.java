@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -17,17 +15,15 @@ public class Customer {
 	private long customerId;
 
 	@Size(min = 1, max = 50, message = "First Name should be between 1 and 50 chars long")
-	@Pattern(regexp = "[A-Za-z\\W]+", message = "First Name should not contain any special characters")
 	private String firstName;
 
 	@Size(min = 1, max = 50, message = "Last Name should be between 1 and 50 chars long")
-	@Pattern(regexp = "[A-Za-z\\W]+", message = "Last Name should not contain any special characters")
 	private String lastName;
+
 	@JsonInclude(value = JsonInclude.Include.NON_NULL)
 	private Integer age;
 
-	@NotNull(message = "Date of birath cannot be blank")
-	@Past
+	@NotNull(message = "Date of birth cannot be blank")
 	@JsonInclude(value = JsonInclude.Include.NON_NULL)
 	private Date dateOfBirth;
 
@@ -36,6 +32,14 @@ public class Customer {
 
 	public Customer() {
 
+	}
+
+	public Customer(String firstName, String lastName, Date dateOfBirth, Address address) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+		this.address = address;
 	}
 
 	public Customer(long id, long customerId, String firstName, String lastName, Integer age, Date dateOfBirth,
